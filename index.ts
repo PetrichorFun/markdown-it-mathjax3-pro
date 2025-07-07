@@ -263,6 +263,9 @@ function extractCssFromStyleTag(str: string) {
 function plugin(md:MarkdownIt, options:any) {
 
     if (options?.user_side) {
+        // set user options for inlineMathSeparator and displayMathSeparator
+        let tex = options?.tex
+
         md.core.ruler.push('inject_content', (state) => {
             if (!state.env.frontmatter) state.env.frontmatter = {};
             let mathjax_options = options?.mathjax_options || {};
@@ -272,15 +275,20 @@ function plugin(md:MarkdownIt, options:any) {
                     type: 'script',
                     contribution: { type: 'text/javascript' },
                     content: `window.MathJax = {
-                            startup: { ready: () => {
-                                MathJax.startup.defaultReady();
-                                console.log('MathJax loaded');
-                            }
-                                },
-                            options: ${JSON.stringify(
-                                Object.assign({
-                                    enableMenu: true,
-                                }, mathjax_options))}
+                                    startup: { 
+                                        ready: () => {
+                                            MathJax.startup.defaultReady();
+                                            console.log('MathJax loaded');
+                                        }
+                                    },
+                                    tex: ${JSON.stringify({
+                                            inlineMath: [['$', '$']],
+                                            displayMath: [['$$', '$$']]
+                                    }, tex)},
+                                    options: ${JSON.stringify(
+                                        Object.assign({
+                                            enableMenu: true,
+                                        }, mathjax_options))}
                             };`
                 },
                 {
@@ -295,6 +303,10 @@ function plugin(md:MarkdownIt, options:any) {
         });
     }
     else {
+        // set user options for inlineMathSeparator and displayMathSeparator
+        inlineMathSeparator = options?.tex.inlineMath || inlineMathSeparator;
+        displayMathSeparator = options?.tex.displayMath || displayMathSeparator;
+
         // Default options
         const documentOptions = {
             InputJax: new TeX(
@@ -326,9 +338,6 @@ function plugin(md:MarkdownIt, options:any) {
                 )
         };
 
-        // set user options for inlineMathSeparator and displayMathSeparator
-        inlineMathSeparator = options?.tex.inlineMath || inlineMathSeparator;
-        displayMathSeparator = options?.tex.displayMath || displayMathSeparator;
         // set rulers for inline or block
         md.inline.ruler.before("text", "math_inline", math_inline);
         md.block.ruler.after("blockquote", "math_block", math_block, {
