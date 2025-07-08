@@ -2,6 +2,8 @@
 
 一个功能强大的 markdown-it 插件，支持 MathJax 3，具有增强功能，支持服务器端渲染 (SSR) 和客户端渲染 (CSR) 模式。
 
+谢谢项目作为指导，我重构了整个项目，在此仍表示感谢：markdown-it-mathjax3 https://github.com/tani/markdown-it-mathjax3 
+
 ## 特性
 
 - 🚀 **双重渲染模式**：支持 SSR 和 CSR 两种模式

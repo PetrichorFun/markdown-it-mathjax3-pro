@@ -3,6 +3,10 @@
 A powerful markdown-it plugin for MathJax 3 with enhanced features supporting both Server-Side Rendering (SSR) and Client-Side Rendering (CSR) modes.
 - [中文文档](./README.zh.md)
 
+Thanks for project :
+
+[markdown-it-mathjax3]: https://github.com/tani/markdown-it-mathjax3
+
 ## Features
 
 - 🚀 **Dual Rendering Modes**: Support both SSR and CSR
