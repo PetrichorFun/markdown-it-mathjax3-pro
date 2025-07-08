@@ -1,5 +1,5 @@
 import MarkdownIt from 'markdown-it'
-import MarkdownItMathJaX3PRO from '../index.js'
+import MarkdownItMathJaX3PRO from 'markdown-it-mathjax3-pro'
 import { writeFileSync } from 'fs'
 import { join } from 'path'
 

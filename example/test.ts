@@ -1,5 +1,5 @@
 import MarkdownIt from 'markdown-it'
-import MarkdownItMathJaX3PRO from '../index.js'
+import MarkdownItMathJaX3PRO from 'markdown-it-mathjax3-pro'
 import { writeFileSync } from 'fs'
 import { join } from 'path'
 
@@ -28,10 +28,7 @@ $$
 `
 
 // 初始化 markdown-it 并使用插件
-const mdInstance = MarkdownIt().use(MarkdownItMathJaX3PRO, {
-    tex: {tags: 'ams'},
-    user_side:{}
-});
+const mdInstance = MarkdownIt().use(MarkdownItMathJaX3PRO);
 
 // 创建共享的 env 对象
 const env: any = {};

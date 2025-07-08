@@ -48,6 +48,8 @@ The plugin accepts various configuration options:
 ### Server-Side Rendering (Default)
 
 ```javascript
+import MarkdownItMathJaX3PRO from 'markdown-it-mathjax3-pro'
+
 const md = MarkdownIt().use(MarkdownItMathJaX3PRO, {
   tex: {
     inlineMath: [['$', '$'], ['\\(', '\\)']],
@@ -69,6 +71,8 @@ const md = MarkdownIt().use(MarkdownItMathJaX3PRO, {
 ### Client-Side Rendering
 
 ```javascript
+import MarkdownItMathJaX3PRO from 'markdown-it-mathjax3-pro'
+
 const md = MarkdownIt().use(MarkdownItMathJaX3PRO, {
   user_side: true,
   mathjax_options: {
@@ -136,6 +140,99 @@ See test.ts for details
 ### Client-Side Rendering Example
 
 See test4csr.ts for details
+
+### Vitepress example
+
+ServerSide mode:
+
+```ts
+import MarkdownItMathJaX3PRO from 'markdown-it-mathjax3-pro'
+
+export default defineConfig({
+  title: "neonexus",
+  description: "docs for neonexus",
+  vue: {
+    template: {
+      compilerOptions: {
+        isCustomElement: (tag) => tag.includes('mjx-')
+      }
+    }
+  },
+  markdown: {
+    config: (md) => {
+      md.use(mathjax3, {
+        // add new inlineMathSeparator && displayMathSeparator
+        tex: {
+          inlineMath: [['$', '$'], ['§', '§']],
+          displayMath: [['$$', '$$'], ['§§', '§§']],
+        },
+        //enable chtml mode 
+        chtml: {
+          fontURL: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2'
+        }
+      })
+    },
+    theme: {
+      light: "catppuccin-latte",
+      dark: "catppuccin-macchiato",
+    },
+  },
+  //inject ccs to head for mathjax
+  transformPageData(pageData) {
+    const head = (pageData.frontmatter.head ??= []);
+    const inject_content = pageData.frontmatter.inject_content;
+    if (inject_content && Array.isArray(inject_content)) {
+      inject_content.forEach(item => {
+        const { type, contribution, content } = item;
+        const headEntry = [type, contribution || {}, content || ''].filter(Boolean);
+        head.push(headEntry as HeadConfig);
+      });
+
+      delete pageData.frontmatter.inject_content;
+    }
+  },
+})
+```
+
+UserSide mode:
+
+```ts
+import MarkdownItMathJaX3PRO from 'markdown-it-mathjax3-pro'
+
+export default defineConfig({
+  title: "your name",
+  description: "docs for wahtever",
+  vue: {
+    template: {
+      compilerOptions: {
+        isCustomElement: (tag) => tag.includes('mjx-')
+      }
+    }
+  },
+  markdown: {
+    config: (md) => {
+      md.use(mathjax3, {
+        user_side: true,
+      })
+    },
+  },
+  //inject for mathjax script
+  transformPageData(pageData) {
+    const head = (pageData.frontmatter.head ??= []);
+    const inject_content = pageData.frontmatter.inject_content;
+    if (inject_content && Array.isArray(inject_content)) {
+      inject_content.forEach(item => {
+        const { type, contribution, content } = item;
+        const headEntry = [type, contribution || {}, content || ''].filter(Boolean);
+        head.push(headEntry as HeadConfig);
+      });
+      delete pageData.frontmatter.inject_content;
+    }
+  },
+})
+```
+
+
 
 ## License
 
